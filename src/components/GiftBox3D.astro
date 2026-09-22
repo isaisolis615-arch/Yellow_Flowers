@@ -1,0 +1,331 @@
+---
+interface Props {
+  onOpen: () => void;
+}
+
+const { onOpen } = Astro.props;
+const boxId = 'gift-box-3d';
+---
+
+<div id={boxId} class="gift-box-3d" role="button" tabindex="0" aria-label="Abrir caja de regalo" data-gift-box>
+  <div class="gift-box__scene">
+    <div class="gift-box__cube">
+      <div class="gift-box__face gift-box__face--bottom"></div>
+      <div class="gift-box__face gift-box__face--back"></div>
+      <div class="gift-box__face gift-box__face--left"></div>
+      <div class="gift-box__face gift-box__face--right"></div>
+      <div class="gift-box__face gift-box__face--front"></div>
+      <div class="gift-box__face gift-box__face--top">
+        <div class="gift-box__lid-inner">
+          <div class="gift-box__ribbon gift-box__ribbon--vertical"></div>
+          <div class="gift-box__ribbon gift-box__ribbon--horizontal"></div>
+          <div class="gift-box__bow">
+            <div class="gift-box__bow-loop gift-box__bow-loop--left"></div>
+            <div class="gift-box__bow-loop gift-box__bow-loop--right"></div>
+            <div class="gift-box__bow-center"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="gift-box__shadow"></div>
+  </div>
+  <div class="gift-box__glow" aria-hidden="true"></div>
+  <p class="gift-box__prompt">Toca para abrir</p>
+</div>
+
+<style>
+  .gift-box-3d {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(ellipse at center, var(--color-crema) 0%, var(--color-amarillo-suave) 100%);
+    z-index: 1000;
+    perspective: 1000px;
+    overflow: hidden;
+  }
+
+  .gift-box__scene {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    transform-style: preserve-3d;
+    transform: rotateX(-15deg) rotateY(15deg);
+  }
+
+  .gift-box__cube {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .gift-box-3d[data-state="opening"] .gift-box__cube {
+    transform: rotateX(-15deg) rotateY(15deg) translateY(-60px);
+  }
+
+  .gift-box__face {
+    position: absolute;
+    background: var(--paper-bg-amarillo);
+    border: 2px solid var(--color-amarillo-medio);
+    box-shadow: var(--shadow-medium), inset 0 0 0 1px rgba(255,255,255,0.3);
+  }
+
+  .gift-box__face--bottom {
+    width: 200px;
+    height: 140px;
+    transform: rotateX(-90deg) translateZ(-70px);
+    border-radius: var(--radius-md);
+  }
+
+  .gift-box__face--back {
+    width: 200px;
+    height: 140px;
+    transform: translateZ(-100px);
+    border-radius: var(--radius-md);
+  }
+
+  .gift-box__face--left {
+    width: 140px;
+    height: 200px;
+    transform: rotateY(-90deg) translateZ(-100px);
+    border-radius: var(--radius-md);
+  }
+
+  .gift-box__face--right {
+    width: 140px;
+    height: 200px;
+    transform: rotateY(90deg) translateZ(0);
+    border-radius: var(--radius-md);
+  }
+
+  .gift-box__face--front {
+    width: 200px;
+    height: 200px;
+    transform: translateZ(100px);
+    border-radius: var(--radius-md);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-lg);
+    color: var(--color-gris-calido);
+  }
+
+  .gift-box__face--top {
+    position: absolute;
+    width: 204px;
+    height: 204px;
+    top: -2px;
+    left: -2px;
+    transform-origin: center bottom;
+    transform: rotateX(0deg) translateZ(140px);
+    border-radius: var(--radius-md);
+    transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+    z-index: 10;
+  }
+
+  .gift-box-3d[data-state="opening"] .gift-box__face--top {
+    transform: rotateX(-110deg) translateZ(140px) translateY(-60px);
+  }
+
+  .gift-box__lid-inner {
+    position: absolute;
+    inset: 0;
+    background: var(--paper-bg-amarillo);
+    border: 2px solid var(--color-amarillo-medio);
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    transform-style: preserve-3d;
+  }
+
+  .gift-box__ribbon {
+    position: absolute;
+    background: var(--color-rosa-suave);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .gift-box__ribbon--vertical {
+    width: 16px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .gift-box__ribbon--horizontal {
+    width: 100%;
+    height: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .gift-box__bow {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 40px;
+  }
+
+  .gift-box__bow-loop {
+    position: absolute;
+    width: 28px;
+    height: 36px;
+    background: var(--color-rosa-suave);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: var(--shadow-soft);
+    top: 0;
+  }
+
+  .gift-box__bow-loop--left {
+    left: 0;
+    transform: rotate(-15deg);
+  }
+
+  .gift-box__bow-loop--right {
+    right: 0;
+    transform: rotate(15deg);
+  }
+
+  .gift-box__bow-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: var(--color-rosa-suave);
+    border-radius: 50%;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .gift-box__shadow {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0.8);
+    width: 180px;
+    height: 20px;
+    background: radial-gradient(ellipse, var(--color-sombra-media) 0%, transparent 70%);
+    filter: blur(8px);
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s;
+  }
+
+  .gift-box-3d[data-state="opening"] .gift-box__shadow {
+    transform: translateX(-50%) scaleX(0.3);
+    opacity: 0;
+  }
+
+  .gift-box__glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, var(--color-amarillo-medio) 0%, transparent 70%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease-out;
+  }
+
+  .gift-box-3d[data-state="opening"] .gift-box__glow {
+    opacity: 0.4;
+    animation: pulseGlow 1.5s ease-out;
+  }
+
+  @keyframes pulseGlow {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: scale(2); opacity: 0; }
+  }
+
+  .gift-box__prompt {
+    position: absolute;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-lg);
+    color: var(--color-gris-calido);
+    animation: bouncePrompt 2s ease-in-out infinite;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+  }
+
+  @keyframes bouncePrompt {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-8px); }
+  }
+
+  .gift-box-3d[data-state="opened"] {
+    pointer-events: none;
+  }
+
+  .gift-box-3d[data-state="opened"] .gift-box__cube,
+  .gift-box-3d[data-state="opened"] .gift-box__shadow,
+  .gift-box-3d[data-state="opened"] .gift-box__prompt {
+    opacity: 0;
+    transform: scale(0.8) translateY(-100px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  @media (max-width: 480px) {
+    .gift-box__scene {
+      width: 160px;
+      height: 160px;
+    }
+    .gift-box__face--bottom { width: 160px; height: 110px; transform: rotateX(-90deg) translateZ(-55px); }
+    .gift-box__face--back { width: 160px; height: 110px; transform: translateZ(-80px); }
+    .gift-box__face--left { width: 110px; height: 160px; transform: rotateY(-90deg) translateZ(-80px); }
+    .gift-box__face--right { width: 110px; height: 160px; transform: rotateY(90deg) translateZ(0); }
+    .gift-box__face--front { width: 160px; height: 160px; transform: translateZ(80px); font-size: var(--fs-base); }
+    .gift-box__face--top { width: 164px; height: 164px; transform: rotateX(0deg) translateZ(110px); }
+    .gift-box-3d[data-state="opening"] .gift-box__face--top { transform: rotateX(-110deg) translateZ(110px) translateY(-50px); }
+    .gift-box-3d[data-state="opening"] .gift-box__cube { transform: rotateX(-15deg) rotateY(15deg) translateY(-50px); }
+    .gift-box__shadow { width: 140px; bottom: -16px; }
+    .gift-box__bow { width: 48px; height: 32px; top: -16px; }
+    .gift-box__bow-loop { width: 22px; height: 28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gift-box__cube,
+    .gift-box__face--top,
+    .gift-box__shadow,
+    .gift-box__glow,
+    .gift-box__prompt {
+      transition: none !important;
+      animation: none !important;
+    }
+    .gift-box-3d[data-state="opening"] .gift-box__cube,
+    .gift-box-3d[data-state="opening"] .gift-box__face--top {
+      transform: rotateX(-110deg) translateZ(140px) translateY(-60px);
+    }
+  }
+</style>
+
+<script>
+  const box = document.getElementById('gift-box-3d');
+  let opened = false;
+
+  function openBox() {
+    if (opened) return;
+    opened = true;
+    box.dataset.state = 'opening';
+    setTimeout(() => {
+      box.dataset.state = 'opened';
+      onOpen();
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 600);
+    }, 1000);
+  }
+
+  box.addEventListener('click', openBox);
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openBox();
+    }
+  });
+
+  box.addEventListener('touchstart', () => {}, { passive: true });
+</script>

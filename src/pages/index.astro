@@ -1,0 +1,277 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GiftBox3D from '../components/GiftBox3D.astro';
+import PhotoMasonry from '../components/PhotoMasonry.astro';
+import NoteCard from '../components/NoteCard.astro';
+import Lightbox from '../components/Lightbox.astro';
+import AudioPlayer from '../components/AudioPlayer.astro';
+import PetalRain from '../components/PetalRain.astro';
+import photos from '../data/photos.json';
+import notes from '../data/notes.json';
+
+const pageTitle = 'Ramos de Sol 🌻';
+const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos, recuerdos y rosas amarillas';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <GiftBox3D onOpen={() => {
+    document.body.classList.add('content-revealed');
+    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth' });
+  }} />
+
+  <main id="main-content" class="main-content" hidden>
+    <header class="hero" data-petal-trigger>
+      <h1 class="hero__title animate-fade-in">Ramos de Sol</h1>
+      <p class="hero__subtitle animate-slide-up stagger-1">Para mi mejor amiga, con todo mi cariño</p>
+      <div class="hero__divider animate-slide-up stagger-2" aria-hidden="true">
+        <span class="hero__flower">🌻</span>
+        <span class="hero__flower">🌻</span>
+        <span class="hero__flower">🌻</span>
+      </div>
+    </header>
+
+    <section class="section section--story" aria-labelledby="story-title">
+      <div class="container">
+        <h2 id="story-title" class="section__title animate-fade-in">Nuestra Historia</h2>
+        <div class="story__grid">
+          <div class="story__photos animate-slide-up stagger-1">
+            <PhotoMasonry photos={photos} />
+          </div>
+          <div class="story__notes animate-slide-up stagger-2">
+            {notes.map((note, index) => (
+              <NoteCard
+                content={note.content}
+                type={note.type}
+                position={note.position}
+                photoIndex={note.photoIndex}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--gallery" aria-labelledby="gallery-title">
+      <div class="container">
+        <h2 id="gallery-title" class="section__title animate-fade-in">Galería Completa</h2>
+        <p class="section__hint animate-slide-up">Haz click en cualquier foto para ampliarla</p>
+        <PhotoMasonry photos={photos} />
+      </div>
+    </section>
+
+    <section class="section section--final" aria-labelledby="final-title">
+      <div class="container">
+        <h2 id="final-title" class="section__title animate-fade-in">Siempre Juntas</h2>
+        <div class="final__content animate-slide-up">
+          <NoteCard
+            type="poema"
+            content="No hace falta un día especial\nPara recordarte lo mucho que significas\nCada rosa de este ramo virtual\nLleva tu nombre escrito en el corazón\n\nGracias por ser mi sol en los días nublados\nMi risa cuando quiero llorar\nMi hogar en forma de persona\n\nTe quiero hoy, mañana y siempre\nMi mejor amiga, mi hermana del alma\n\n🌻 Con todo mi cariño 🌻"
+            position="center"
+          />
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container">
+        <p class="footer__text">Hecho con 💛 para ti • {new Date().getFullYear()}</p>
+        <p class="footer__text footer__text--small">Ramos de Sol · Un regalo que no caduca</p>
+      </div>
+    </footer>
+  </main>
+
+  <Lightbox />
+  <AudioPlayer
+    tracks={[
+      { src: '/audio/The_Way_You_Make_Me_Feel.mp3', title: 'The Way You Make Me Feel', artist: 'Michael Jackson' },
+      { src: '/audio/You_Rock_My_World.mp3', title: 'You Rock My World', artist: 'Michael Jackson' }
+    ]}
+  />
+  <PetalRain trigger="scroll" />
+</Layout>
+
+<style>
+  .main-content {
+    opacity: 0;
+    transition: opacity var(--transition-slow);
+  }
+
+  .main-content[hidden] {
+    display: none;
+  }
+
+  .content-revealed .main-content {
+    display: block;
+  }
+
+  .content-revealed .main-content {
+    animation: fadeIn var(--transition-slow) ease-out forwards;
+  }
+
+  .hero {
+    min-height: 60vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: var(--space-4xl) var(--container-padding);
+    background: linear-gradient(180deg, var(--color-crema) 0%, var(--color-blanco-hueso) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, var(--color-amarillo-suave) 0%, transparent 60%);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-4xl);
+    font-weight: 700;
+    color: var(--color-negro-suave);
+    margin-bottom: var(--space-md);
+    text-shadow: 0 2px 4px var(--color-sombra);
+  }
+
+  .hero__subtitle {
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-xl);
+    color: var(--color-gris-calido);
+    max-width: 600px;
+  }
+
+  .hero__divider {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-top: var(--space-xl);
+  }
+
+  .hero__flower {
+    font-size: var(--fs-2xl);
+    animation: floatFlower 3s ease-in-out infinite;
+  }
+
+  .hero__flower:nth-child(2) { animation-delay: 0.5s; }
+  .hero__flower:nth-child(3) { animation-delay: 1s; }
+
+  @keyframes floatFlower {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+
+  .section__title {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .section__title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-amarillo-medio), var(--color-rosa-suave));
+    border-radius: var(--radius-full);
+  }
+
+  .section__hint {
+    text-align: center;
+    color: var(--color-gris-suave);
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .story__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+
+  @media (min-width: 768px) {
+    .story__grid {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+    .story__notes {
+      position: sticky;
+      top: var(--space-xl);
+    }
+  }
+
+  .story__photos {
+    order: 1;
+  }
+
+  .story__notes {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  @media (min-width: 768px) {
+    .story__photos { order: 1; }
+    .story__notes { order: 2; }
+  }
+
+  .section--gallery {
+    background: var(--color-blanco-hueso);
+  }
+
+  .section--final {
+    background: linear-gradient(180deg, var(--color-crema) 0%, var(--color-rosa-palido) 100%);
+  }
+
+  .final__content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .footer {
+    padding: var(--space-2xl) var(--container-padding);
+    text-align: center;
+    background: var(--color-negro-suave);
+    color: var(--color-blanco-hueso);
+  }
+
+  .footer__text {
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-lg);
+    margin-bottom: var(--space-xs);
+  }
+
+  .footer__text--small {
+    font-family: var(--font-ui);
+    font-size: var(--fs-sm);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (max-width: 480px) {
+    .hero { min-height: 50vh; padding: var(--space-2xl) var(--container-padding); }
+    .hero__title { font-size: var(--fs-3xl); }
+    .hero__subtitle { font-size: var(--fs-lg); }
+    .section { padding: var(--space-2xl) 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__flower,
+    .main-content {
+      animation: none !important;
+    }
+  }
+</style>

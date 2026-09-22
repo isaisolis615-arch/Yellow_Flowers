@@ -1,0 +1,65 @@
+[
+  {
+    "id": "n1",
+    "type": "postit",
+    "content": "Porque cada rosa amarilla que te regalo lleva un pedacito de mi corazón 💛",
+    "position": "left",
+    "photoIndex": 0
+  },
+  {
+    "id": "n2",
+    "type": "carta",
+    "content": "Querida mejor amiga:\n\nNo hay palabras suficientes para agradecerte por estar siempre ahí. Por las risas que se vuelven eternas, por los silencios que no necesitan palabras, por ser mi refugio en los días grises y mi cómplice en los días de sol.\n\nEstas fotos son solo un pequeño reflejo de todo lo que hemos construido juntas. Cada una guarda una historia, una anécdota, un 'te acuerdas cuando...' que me hace sonreír solo de pensarlo.\n\nGracias por ser mi persona favorita, mi confidente, mi hermana elegida. Por los niños que fuimos y por las mujeres en las que nos hemos convertido.\n\nTe quiero infinito.",
+    "position": "center",
+    "photoIndex": null
+  },
+  {
+    "id": "n3",
+    "type": "postit",
+    "content": "Mira qué pequeños éramos... y ya éramos inseparables 👶👧",
+    "position": "right",
+    "photoIndex": 1
+  },
+  {
+    "id": "n4",
+    "type": "poema",
+    "content": "Amarillo como el sol que nos ilumina\nAmarillo como la risa que compartimos\nAmarillo como los días que no terminan\nAmarillo como este lazo que no se rompe\n\nNo hace falta una fecha en el calendario\nPara recordarte lo mucho que vales\nCada rosa de este ramo virtual\nLleva escrita tu nombre en los pétalos",
+    "position": "center",
+    "photoIndex": null
+  },
+  {
+    "id": "n5",
+    "type": "postit",
+    "content": "Michael Jackson sonaría de fondo mientras nos reímos sin parar 🎵",
+    "position": "left",
+    "photoIndex": 2
+  },
+  {
+    "id": "n6",
+    "type": "carta",
+    "content": "A veces pienso en todo lo que hemos vivido y me parece increíble. Desde aquellos juegos de niños hasta las conversaciones profundas de ahora. Has visto mis mejores y peores versiones, y sigues aquí. Eso es algo que no se compra, no se pide, solo se cultiva con años de cariño genuino.\n\nEste ramo no es solo por hoy. Es por todos los mañanas que vendrán. Por las rosas que aún no hemos plantado, por las canciones que aún no hemos cantado a todo pulmón, por las fotos que aún no hemos tomado.\n\nPrometo seguir siendo tu amiga en las buenas, en las malas, en las ordinarias y en las extraordinarias. Porque la amistad verdadera no se mide en tiempo, se mide en huella. Y tú has dejado la tuya en lo más profundo de mí.",
+    "position": "right",
+    "photoIndex": null
+  },
+  {
+    "id": "n7",
+    "type": "postit",
+    "content": "Esta foto me hace sonreír cada vez que la veo 😊",
+    "position": "center",
+    "photoIndex": 5
+  },
+  {
+    "id": "n8",
+    "type": "poema",
+    "content": "Si la amistad tuviera color\nSería amarillo como estas rosas\nBrillante, cálido, eterno\nComo el sol que nunca se pone\n\nSi la amistad tuviera sonido\nSería nuestra risa compartida\nComo la música que nos une\nComo MJ en la radio sonando\n\nSi la amistad tuviera forma\nSería esta caja que se abre\nPara mostrar lo que el corazón guarda\nY que las palabras no alcanzan a decir",
+    "position": "center",
+    "photoIndex": null
+  },
+  {
+    "id": "n9",
+    "type": "postit",
+    "content": "Para muchas más aventuras juntas 🌻",
+    "position": "right",
+    "photoIndex": 10
+  }
+]

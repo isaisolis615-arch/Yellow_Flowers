@@ -1,0 +1,201 @@
+---
+interface Props {
+  content: string;
+  type: 'postit' | 'carta' | 'poema';
+  position?: 'left' | 'right' | 'center';
+  photoIndex?: number;
+}
+
+const { content, type, position = 'center', photoIndex } = Astro.props;
+
+const rotations = ['-3deg', '-1deg', '1deg', '2deg', '-2deg', '3deg'];
+const randomRotation = rotations[Math.floor(Math.random() * rotations.length)];
+const fontFamily = type === 'carta' || type === 'poema' ? 'var(--font-display)' : 'var(--font-handwriting)';
+const className = `note-card note-card--${type} note-card--${position}`;
+---
+
+<article class={className} data-type={type} data-position={position} style={`--note-rotation: ${randomRotation};`}>
+  <div class="note-card__paper">
+    {type === 'postit' && (
+      <div class="note-card__tape" aria-hidden="true"></div>
+    )}
+    <div class="note-card__content" style={`font-family: ${fontFamily};`}>
+      {type === 'poema' ? (
+        <div class="note-card__poema">{content.split('\n').map(line => <p>{line}</p>)}</div>
+      ) : (
+        <p>{content}</p>
+      )}
+    </div>
+    {photoIndex !== undefined && (
+      <span class="note-card__photo-ref" data-photo-index={photoIndex}>📷 Foto {photoIndex + 1}</span>
+    )}
+  </div>
+</article>
+
+<style>
+  .note-card {
+    opacity: 0;
+    animation: slideUp var(--transition-slow) ease-out forwards;
+  }
+
+  .note-card--postit {
+    max-width: 280px;
+    margin: var(--space-md) auto;
+  }
+
+  .note-card--carta,
+  .note-card--poema {
+    max-width: 600px;
+    margin: var(--space-xl) auto;
+  }
+
+  .note-card--left { margin-right: auto; }
+  .note-card--right { margin-left: auto; }
+  .note-card--center { margin-left: auto; margin-right: auto; }
+
+  .note-card__paper {
+    position: relative;
+    padding: var(--space-lg);
+    background: var(--note-bg, var(--paper-bg));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-medium);
+    transform: rotate(var(--note-rotation, 0deg));
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  }
+
+  .note-card__paper::before {
+    content: '';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 60%;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 50%;
+    filter: blur(8px);
+    z-index: -1;
+    transform: rotate(3deg);
+  }
+
+  .note-card:hover .note-card__paper {
+    transform: rotate(var(--note-rotation, 0deg)) scale(1.02);
+    box-shadow: var(--shadow-strong);
+  }
+
+  .note-card--postit .note-card__paper {
+    padding: var(--space-md) var(--space-lg);
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--paper-bg-amarillo);
+    border: 1px solid var(--color-amarillo-medio);
+  }
+
+  .note-card--carta .note-card__paper {
+    background: var(--paper-bg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 28px,
+      rgba(0, 0, 0, 0.03) 28px,
+      rgba(0, 0, 0, 0.03) 29px
+    );
+    padding-top: var(--space-xl);
+  }
+
+  .note-card--poema .note-card__paper {
+    background: var(--paper-bg-rosa);
+    border: 1px solid var(--color-rosa-suave);
+    text-align: center;
+  }
+
+  .note-card__tape {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 60px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+  }
+
+  .note-card__tape::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 4px,
+      rgba(0, 0, 0, 0.03) 4px,
+      rgba(0, 0, 0, 0.03) 8px
+    );
+    border-radius: var(--radius-sm);
+  }
+
+  .note-card__content {
+    font-size: var(--fs-base);
+    line-height: 1.7;
+    color: var(--color-negro-suave);
+    word-wrap: break-word;
+  }
+
+  .note-card--postit .note-card__content {
+    font-size: var(--fs-lg);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .note-card--carta .note-card__content {
+    font-size: var(--fs-base);
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  .note-card--poema .note-card__content {
+    font-size: var(--fs-lg);
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  .note-card__poema p {
+    margin: var(--space-xs) 0;
+  }
+
+  .note-card__photo-ref {
+    display: inline-block;
+    margin-top: var(--space-md);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--color-amarillo-suave);
+    color: var(--color-gris-calido);
+    border-radius: var(--radius-full);
+    font-family: var(--font-ui);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+
+  .note-card__photo-ref:hover {
+    background: var(--color-amarillo-medio);
+    color: var(--color-negro-suave);
+  }
+
+  @media (max-width: 480px) {
+    .note-card--postit { max-width: 100%; }
+    .note-card--carta,
+    .note-card--poema { max-width: 100%; padding: var(--space-md); }
+    .note-card__paper { padding: var(--space-md); border-radius: var(--radius-md); }
+    .note-card--carta .note-card__paper { padding-top: var(--space-lg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note-card { animation: none; opacity: 1; }
+    .note-card__paper { transition: none; }
+  }
+</style>

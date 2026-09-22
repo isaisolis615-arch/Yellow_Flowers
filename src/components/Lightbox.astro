@@ -1,0 +1,249 @@
+---
+---
+
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada de foto" hidden>
+  <div class="lightbox__overlay" data-close></div>
+  <button class="lightbox__close" aria-label="Cerrar" data-close>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--prev" aria-label="Foto anterior" data-nav="prev">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+  <button class="lightbox__nav lightbox__nav--next" aria-label="Foto siguiente" data-nav="next">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </button>
+  <figure class="lightbox__figure">
+    <img class="lightbox__image" src="" alt="" />
+    <figcaption class="lightbox__caption"></figcaption>
+  </figure>
+  <div class="lightbox__counter" aria-live="polite"></div>
+</div>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: grid;
+    place-items: center;
+    padding: var(--space-md);
+    background: rgba(0, 0, 0, 0.9);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+  }
+
+  .lightbox:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox__overlay {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-blanco-hueso);
+    backdrop-filter: blur(8px);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+    z-index: 10;
+  }
+
+  .lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-blanco-hueso);
+    backdrop-filter: blur(8px);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+    z-index: 10;
+  }
+
+  .lightbox__nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .lightbox__nav--prev { left: var(--space-md); }
+  .lightbox__nav--next { right: var(--space-md); }
+
+  .lightbox__figure {
+    position: relative;
+    max-width: 90vw;
+    max-height: 85vh;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform var(--transition-base) cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .lightbox:not([hidden]) .lightbox__figure {
+    transform: scale(1);
+  }
+
+  .lightbox__image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-strong);
+    object-fit: contain;
+  }
+
+  .lightbox__caption {
+    margin-top: var(--space-md);
+    color: var(--color-blanco-hueso);
+    font-family: var(--font-handwriting);
+    font-size: var(--fs-lg);
+    max-width: 90vw;
+  }
+
+  .lightbox__counter {
+    position: absolute;
+    bottom: var(--space-md);
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-family: var(--font-ui);
+    font-size: var(--fs-sm);
+  }
+
+  @media (max-width: 480px) {
+    .lightbox { padding: var(--space-sm); }
+    .lightbox__close { top: var(--space-sm); right: var(--space-sm); width: 40px; height: 40px; }
+    .lightbox__nav { width: 44px; height: 44px; }
+    .lightbox__nav--prev { left: var(--space-sm); }
+    .lightbox__nav--next { right: var(--space-sm); }
+    .lightbox__caption { font-size: var(--fs-base); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox,
+    .lightbox__figure,
+    .lightbox__close,
+    .lightbox__nav {
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const image = lightbox.querySelector('.lightbox__image');
+  const caption = lightbox.querySelector('.lightbox__caption');
+  const counter = lightbox.querySelector('.lightbox__counter');
+  const closeBtn = lightbox.querySelector('.lightbox__close');
+  const prevBtn = lightbox.querySelector('.lightbox__nav--prev');
+  const nextBtn = lightbox.querySelector('.lightbox__nav--next');
+  const overlay = lightbox.querySelector('.lightbox__overlay');
+
+  let photos = [];
+  let currentIndex = 0;
+  let lastFocused = null;
+
+  function openLightbox(index, photoList) {
+    photos = photoList;
+    currentIndex = index;
+    lastFocused = document.activeElement;
+    showPhoto(currentIndex);
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+    trapFocus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  function showPhoto(index) {
+    const photo = photos[index];
+    image.src = photo.src;
+    image.alt = photo.alt;
+    caption.textContent = photo.alt;
+    counter.textContent = `${index + 1} / ${photos.length}`;
+  }
+
+  function navigate(direction) {
+    currentIndex = (currentIndex + direction + photos.length) % photos.length;
+    showPhoto(currentIndex);
+  }
+
+  function trapFocus() {
+    const focusable = lightbox.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    lightbox.addEventListener('keydown', handleTab);
+
+    function handleTab(e) {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  }
+
+  closeBtn.addEventListener('click', closeLightbox);
+  overlay.addEventListener('click', closeLightbox);
+  prevBtn.addEventListener('click', () => navigate(-1));
+  nextBtn.addEventListener('click', () => navigate(1));
+
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.hidden) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+
+  window.openLightbox = openLightbox;
+
+  document.addEventListener('click', (e) => {
+    const item = e.target.closest('.photo-masonry__item');
+    if (item) {
+      const index = parseInt(item.dataset.index, 10);
+      const photoElements = document.querySelectorAll('.photo-masonry__item img');
+      const photoList = Array.from(photoElements).map((img, i) => ({
+        src: img.src.replace(/-\d+w\.webp$/, '.webp'),
+        alt: img.alt
+      }));
+      openLightbox(index, photoList);
+    }
+  });
+</script>
