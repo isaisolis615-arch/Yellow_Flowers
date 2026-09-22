@@ -1,0 +1,112 @@
+/* Variables CSS globales - cargado antes que todo */
+:root {
+  --color-crema: #FFF8E7;
+  --color-amarillo-suave: #FFE8A0;
+  --color-amarillo-medio: #FFD66B;
+  --color-amarillo-fuerte: #F5C04A;
+  --color-rosa-palido: #FFE4EC;
+  --color-rosa-suave: #FADADD;
+  --color-verde-hoja: #C8E6C9;
+  --color-verde-oscuro: #8FBC8F;
+  --color-gris-calido: #6B6B6B;
+  --color-gris-suave: #9A9A9A;
+  --color-blanco-hueso: #FAF9F6;
+  --color-negro-suave: #2D2D2D;
+  --color-sombra: rgba(0, 0, 0, 0.06);
+  --color-sombra-media: rgba(0, 0, 0, 0.12);
+  --color-sombra-fuerte: rgba(0, 0, 0, 0.18);
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-handwriting: 'Caveat', cursive;
+  --font-ui: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --fs-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
+  --fs-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
+  --fs-base: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+  --fs-lg: clamp(1.15rem, 1.05rem + 0.5vw, 1.3rem);
+  --fs-xl: clamp(1.4rem, 1.2rem + 1vw, 1.8rem);
+  --fs-2xl: clamp(1.8rem, 1.5rem + 1.5vw, 2.5rem);
+  --fs-3xl: clamp(2.5rem, 2rem + 2.5vw, 3.5rem);
+  --fs-4xl: clamp(3rem, 2.5rem + 2.5vw, 4.5rem);
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms ease-out;
+  --transition-base: 250ms ease-out;
+  --transition-slow: 400ms ease-out;
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --z-nav: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+  --z-cursor: 400;
+
+  --container-max: 1200px;
+  --container-padding: clamp(1rem, 3vw, 2rem);
+
+  --shadow-soft: 0 2px 8px var(--color-sombra);
+  --shadow-medium: 0 8px 24px var(--color-sombra-media);
+  --shadow-strong: 0 16px 48px var(--color-sombra-fuerte);
+  --shadow-inner: inset 0 2px 4px var(--color-sombra);
+
+  --paper-bg: linear-gradient(135deg, var(--color-blanco-hueso) 0%, var(--color-crema) 100%);
+  --paper-bg-rosa: linear-gradient(135deg, var(--color-rosa-palido) 0%, #FFF0F5 100%);
+  --paper-bg-verde: linear-gradient(135deg, var(--color-verde-hoja) 0%, #E8F5E9 100%);
+  --paper-bg-amarillo: linear-gradient(135deg, var(--color-amarillo-suave) 0%, #FFF8E1 100%);
+
+  --focus-ring: 0 0 0 3px var(--color-amarillo-medio);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-crema: #2A2A2A;
+    --color-amarillo-suave: #3D3D2A;
+    --color-amarillo-medio: #F5C04A;
+    --color-rosa-palido: #3D2A2A;
+    --color-verde-hoja: #2A3D2A;
+    --color-gris-calido: #B0B0B0;
+    --color-blanco-hueso: #1A1A1A;
+    --color-negro-suave: #F0F0F0;
+    --color-sombra: rgba(0, 0, 0, 0.3);
+    --color-sombra-media: rgba(0, 0, 0, 0.4);
+    --color-sombra-fuerte: rgba(0, 0, 0, 0.5);
+    --paper-bg: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%);
+    --paper-bg-rosa: linear-gradient(135deg, #3D2A2A 0%, #2A1A1A 100%);
+    --paper-bg-verde: linear-gradient(135deg, #2A3D2A 0%, #1A2A1A 100%);
+    --paper-bg-amarillo: linear-gradient(135deg, #3D3D2A 0%, #2A2A1A 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Reset básico */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-ui); font-size: var(--fs-base); line-height: 1.6; color: var(--color-negro-suave); background: var(--color-crema); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); font-weight: 600; line-height: 1.2; color: var(--color-negro-suave); }
+img { max-width: 100%; height: auto; display: block; }
+.container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-padding); }
+.skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); padding: var(--space-sm) var(--space-md); background: var(--color-negro-suave); color: var(--color-blanco-hueso); border-radius: var(--radius-md); z-index: var(--z-toast); transition: top var(--transition-fast); }
+.skip-link:focus { top: var(--space-md); }

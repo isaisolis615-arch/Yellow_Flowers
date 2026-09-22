@@ -27,8 +27,8 @@ const socialImage = new URL('/og-image.jpg', Astro.site).href;
     <meta name="twitter:description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="/styles/critical.css" />
-    <link rel="stylesheet" href="/styles/critical.css" media="print" onload="this.media='all'" />
+    <link rel="preload" as="style" href="/styles/global.css" />
+    <link rel="stylesheet" href="/styles/global.css" media="print" onload="this.media='all'" />
     <script>
       if ('loading' in HTMLImageElement.prototype) {
         document.documentElement.classList.add('native-lazy');
