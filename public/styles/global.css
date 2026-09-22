@@ -70,26 +70,6 @@
   --focus-ring: 0 0 0 3px var(--color-amarillo-medio);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-crema: #2A2A2A;
-    --color-amarillo-suave: #3D3D2A;
-    --color-amarillo-medio: #F5C04A;
-    --color-rosa-palido: #3D2A2A;
-    --color-verde-hoja: #2A3D2A;
-    --color-gris-calido: #B0B0B0;
-    --color-blanco-hueso: #1A1A1A;
-    --color-negro-suave: #F0F0F0;
-    --color-sombra: rgba(0, 0, 0, 0.3);
-    --color-sombra-media: rgba(0, 0, 0, 0.4);
-    --color-sombra-fuerte: rgba(0, 0, 0, 0.5);
-    --paper-bg: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%);
-    --paper-bg-rosa: linear-gradient(135deg, #3D2A2A 0%, #2A1A1A 100%);
-    --paper-bg-verde: linear-gradient(135deg, #2A3D2A 0%, #1A2A1A 100%);
-    --paper-bg-amarillo: linear-gradient(135deg, #3D3D2A 0%, #2A2A1A 100%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
