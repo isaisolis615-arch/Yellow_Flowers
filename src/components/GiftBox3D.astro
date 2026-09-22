@@ -309,6 +309,24 @@ const boxId = 'gift-box-3d';
       box.dataset.state = 'opened';
       // Disparar evento personalizado en lugar de callback
       box.dispatchEvent(new CustomEvent('giftbox:opened', { bubbles: true }));
+      
+      // Revelar contenido inmediatamente (sin esperar a main.js)
+      document.body.classList.add('content-revealed');
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.hidden = false;
+        mainContent.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Auto-play música (click en botón play)
+      const audioPlayer = document.querySelector('[data-audio-player]');
+      if (audioPlayer) {
+        const toggleBtn = audioPlayer.querySelector('[data-toggle]');
+        if (toggleBtn && toggleBtn.getAttribute('aria-pressed') === 'false') {
+          toggleBtn.click();
+        }
+      }
+      
       setTimeout(() => {
         box.style.display = 'none';
       }, 600);
