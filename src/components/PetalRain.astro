@@ -6,7 +6,7 @@ interface Props {
 const { trigger = 'scroll' } = Astro.props;
 ---
 
-<canvas id="petal-canvas" class="petal-canvas" aria-hidden="true" hidden></canvas>
+<canvas id="petal-canvas" class="petal-canvas" aria-hidden="true" hidden data-trigger={trigger}></canvas>
 
 <style>
   .petal-canvas {
@@ -32,6 +32,9 @@ const { trigger = 'scroll' } = Astro.props;
   let active = false;
   let width = 0;
   let height = 0;
+
+  // Leer trigger desde data attribute
+  const trigger = canvas.dataset.trigger || 'scroll';
 
   const petalColors = [
     '#FFE8A0', '#FFD66B', '#F5C04A',
