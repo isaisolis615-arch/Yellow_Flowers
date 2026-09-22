@@ -88,23 +88,6 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
 </Layout>
 
 <style>
-  .main-content {
-    opacity: 0;
-    transition: opacity var(--transition-slow);
-  }
-
-  .main-content[hidden] {
-    display: none;
-  }
-
-  .content-revealed .main-content {
-    display: block;
-  }
-
-  .content-revealed .main-content {
-    animation: fadeIn var(--transition-slow) ease-out forwards;
-  }
-
   .hero {
     min-height: 60vh;
     display: grid;
@@ -263,12 +246,5 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
     .hero__title { font-size: var(--fs-3xl); }
     .hero__subtitle { font-size: var(--fs-lg); }
     .section { padding: var(--space-2xl) 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__flower,
-    .main-content {
-      animation: none !important;
-    }
   }
 </style>

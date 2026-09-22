@@ -110,3 +110,91 @@ img { max-width: 100%; height: auto; display: block; }
 .container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-padding); }
 .skip-link { position: absolute; top: -100%; left: 50%; transform: translateX(-50%); padding: var(--space-sm) var(--space-md); background: var(--color-negro-suave); color: var(--color-blanco-hueso); border-radius: var(--radius-md); z-index: var(--z-toast); transition: top var(--transition-fast); }
 .skip-link:focus { top: var(--space-md); }
+
+/* ===== KEYFRAMES GLOBALES ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rotateIn {
+  from { opacity: 0; transform: rotate(-5deg) scale(0.9); }
+  to { opacity: 1; transform: rotate(0) scale(1); }
+}
+
+@keyframes floatFlower {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes bouncePrompt {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-8px); }
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.8; transform: scale(1.2) rotate(10deg); }
+}
+
+/* ===== CLASES DE ANIMACIÓN GLOBALES ===== */
+.animate-fade-in { animation: fadeIn var(--transition-slow) ease-out forwards; }
+.animate-slide-up { animation: slideUp var(--transition-slow) ease-out forwards; }
+.animate-scale-in { animation: scaleIn var(--transition-base) ease-out forwards; }
+.animate-rotate-in { animation: rotateIn var(--transition-bounce) ease-out forwards; }
+
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+.stagger-4 { animation-delay: 400ms; }
+.stagger-5 { animation-delay: 500ms; }
+.stagger-6 { animation-delay: 600ms; }
+.stagger-7 { animation-delay: 700ms; }
+.stagger-8 { animation-delay: 800ms; }
+
+/* ===== REVELACIÓN DE CONTENIDO TRAS CAJA ===== */
+.main-content {
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+
+.main-content[hidden] {
+  display: none;
+}
+
+.content-revealed .main-content {
+  display: block;
+  animation: fadeIn var(--transition-slow) ease-out forwards;
+}
+
+/* Helper para prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .main-content,
+  .content-revealed .main-content,
+  .hero__flower,
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-scale-in,
+  .animate-rotate-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
