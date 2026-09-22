@@ -133,6 +133,29 @@ function initPerformanceObserver() {
   }
 }
 
+function initGiftBox() {
+  const giftBox = document.getElementById('gift-box-3d');
+  if (!giftBox) return;
+
+  giftBox.addEventListener('giftbox:opened', () => {
+    document.body.classList.add('content-revealed');
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.hidden = false;
+      mainContent.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Auto-play music after user interaction (gift box click)
+    const audioPlayer = document.querySelector('[data-audio-player]');
+    if (audioPlayer) {
+      const toggleBtn = audioPlayer.querySelector('[data-toggle]');
+      if (toggleBtn && toggleBtn.getAttribute('aria-pressed') === 'false') {
+        toggleBtn.click();
+      }
+    }
+  });
+}
+
 function init() {
   initScrollAnimations();
   initSmoothScroll();
@@ -141,6 +164,7 @@ function init() {
   initParallaxHero();
   initLazyImages();
   initPerformanceObserver();
+  initGiftBox();
 
   console.log('🌻 Ramos de Sol cargado correctamente');
 }
