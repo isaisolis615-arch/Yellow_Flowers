@@ -149,18 +149,27 @@ img { max-width: 100%; height: auto; display: block; }
 .stagger-8 { animation-delay: 800ms; }
 
 /* ===== REVELACIÓN DE CONTENIDO TRAS CAJA ===== */
+/* Usamos visibility + opacity en lugar de display para permitir transiciones */
 .main-content {
   opacity: 0;
-  transition: opacity var(--transition-slow);
+  visibility: hidden;
+  transition: opacity var(--transition-slow) ease-out, visibility 0s linear var(--transition-slow);
+  /* Forzar capa de composición para mejor rendimiento */
+  will-change: opacity, visibility;
 }
 
 .main-content[hidden] {
-  display: none;
+  /* No usamos display: none, usamos visibility */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .content-revealed .main-content {
-  display: block;
-  animation: fadeIn var(--transition-slow) ease-out forwards;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity var(--transition-slow) ease-out, visibility 0s linear 0s;
 }
 
 /* Helper para prefers-reduced-motion */
@@ -174,7 +183,7 @@ img { max-width: 100%; height: auto; display: block; }
   .animate-rotate-in {
     animation: none !important;
     opacity: 1 !important;
-    transform: none !important;
+    visibility: visible !important;
     transition: none !important;
   }
 }
