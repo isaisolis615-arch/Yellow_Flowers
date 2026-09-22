@@ -14,10 +14,7 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <GiftBox3D onOpen={() => {
-    document.body.classList.add('content-revealed');
-    document.getElementById('main-content')?.scrollIntoView({ behavior: 'smooth' });
-  }} />
+  <GiftBox3D />
 
   <main id="main-content" class="main-content" hidden>
     <header class="hero" data-petal-trigger>
@@ -89,6 +86,17 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
   />
   <PetalRain trigger="scroll" />
 </Layout>
+
+<script>
+  document.addEventListener('giftbox:opened', () => {
+    document.body.classList.add('content-revealed');
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.hidden = false;
+      mainContent.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+</script>
 
 <style>
   .main-content {

@@ -1,9 +1,4 @@
 ---
-interface Props {
-  onOpen: () => void;
-}
-
-const { onOpen } = Astro.props;
 const boxId = 'gift-box-3d';
 ---
 
@@ -312,7 +307,8 @@ const boxId = 'gift-box-3d';
     box.dataset.state = 'opening';
     setTimeout(() => {
       box.dataset.state = 'opened';
-      onOpen();
+      // Disparar evento personalizado en lugar de callback
+      box.dispatchEvent(new CustomEvent('giftbox:opened', { bubbles: true }));
       setTimeout(() => {
         box.style.display = 'none';
       }, 600);
