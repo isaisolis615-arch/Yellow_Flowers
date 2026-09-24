@@ -1,8 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import GiftBox3D from '../components/GiftBox3D.astro';
-import PhotoMasonry from '../components/PhotoMasonry.astro';
-import NoteCard from '../components/NoteCard.astro';
+import StoryTimeline from '../components/StoryTimeline.astro';
 import Lightbox from '../components/Lightbox.astro';
 import AudioPlayer from '../components/AudioPlayer.astro';
 import PetalRain from '../components/PetalRain.astro';
@@ -27,36 +26,29 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
       </div>
     </header>
 
-    <section class="section section--story" aria-labelledby="story-title">
-      <div class="container">
-        <h2 id="story-title" class="section__title animate-fade-in">Nuestra Historia</h2>
-        <div class="story__grid">
-          <div class="story__photos animate-slide-up stagger-1">
-            <PhotoMasonry photos={photos} />
-          </div>
-          <div class="story__notes animate-slide-up stagger-2">
-            {notes.map((note, index) => (
-              <NoteCard
-                content={note.content}
-                type={note.type}
-                position={note.position}
-                photoIndex={note.photoIndex}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+    <StoryTimeline photos={photos} notes={notes} />
 
     <section class="section section--final" aria-labelledby="final-title">
       <div class="container">
         <h2 id="final-title" class="section__title animate-fade-in">Siempre Juntas</h2>
         <div class="final__content animate-slide-up">
-          <NoteCard
-            type="poema"
-            content="No hace falta un día especial\nPara recordarte lo mucho que significas\nCada rosa de este ramo virtual\nLleva tu nombre escrito en el corazón\n\nGracias por ser mi sol en los días nublados\nMi risa cuando quiero llorar\nMi hogar en forma de persona\n\nTe quiero hoy, mañana y siempre\nMi mejor amiga, mi hermana del alma\n\n🌻 Con todo mi cariño 🌻"
-            position="center"
-          />
+          <div class="sticky-note sticky-note--amarillo animate-slide-up" style="max-width: 500px; margin: var(--space-xl) auto;">
+            <div class="sticky-note__poema">
+              <p>No hace falta un día especial</p>
+              <p>Para recordarte lo mucho que significas</p>
+              <p>Cada rosa de este ramo virtual</p>
+              <p>Lleva tu nombre escrito en el corazón</p>
+              <p></p>
+              <p>Gracias por ser mi sol en los días nublados</p>
+              <p>Mi risa cuando quiero llorar</p>
+              <p>Mi hogar en forma de persona</p>
+              <p></p>
+              <p>Te quiero hoy, mañana y siempre</p>
+              <p>Mi mejor amiga, mi hermana del alma</p>
+              <p></p>
+              <p>🌻 Con todo mi cariño 🌻</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -160,57 +152,12 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
     border-radius: var(--radius-full);
   }
 
-  .section__hint {
-    text-align: center;
-    color: var(--color-gris-suave);
-    font-family: var(--font-handwriting);
-    font-size: var(--fs-lg);
-    margin-bottom: var(--space-xl);
-  }
-
-  .story__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-2xl);
-  }
-
-  @media (min-width: 768px) {
-    .story__grid {
-      grid-template-columns: 1fr 1fr;
-      align-items: start;
-    }
-    .story__notes {
-      position: sticky;
-      top: var(--space-xl);
-    }
-  }
-
-  .story__photos {
-    order: 1;
-  }
-
-  .story__notes {
-    order: 2;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-md);
-  }
-
-  @media (min-width: 768px) {
-    .story__photos { order: 1; }
-    .story__notes { order: 2; }
-  }
-
-  .section--gallery {
-    background: var(--color-blanco-hueso);
-  }
-
   .section--final {
     background: linear-gradient(180deg, var(--color-crema) 0%, var(--color-rosa-palido) 100%);
   }
 
   .final__content {
-    max-width: 700px;
+    max-width: 600px;
     margin: 0 auto;
   }
 

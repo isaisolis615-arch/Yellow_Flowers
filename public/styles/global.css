@@ -18,6 +18,7 @@
 
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-handwriting: 'Caveat', cursive;
+  --font-sticky: 'Reenie Beanie', cursive;
   --font-ui: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --fs-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
@@ -68,6 +69,13 @@
   --paper-bg-amarillo: linear-gradient(135deg, var(--color-amarillo-suave) 0%, #FFF8E1 100%);
 
   --focus-ring: 0 0 0 3px var(--color-amarillo-medio);
+
+  /* Sticky note colors */
+  --sticky-amarillo: #FFFC99;
+  --sticky-verde: #C8FACC;
+  --sticky-azul: #A8D0FF;
+  --sticky-rosa: #FFD6E8;
+  --sticky-naranja: #FFE5B4;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -148,18 +156,95 @@ img { max-width: 100%; height: auto; display: block; }
 .stagger-7 { animation-delay: 700ms; }
 .stagger-8 { animation-delay: 800ms; }
 
+/* ===== STICKY NOTES ===== */
+.sticky-note {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  min-height: 180px;
+  padding: var(--space-lg);
+  margin: var(--space-lg) auto;
+  box-sizing: border-box;
+  font-family: var(--font-sticky);
+  font-size: var(--fs-lg);
+  line-height: 1.4;
+  color: var(--color-negro-suave);
+  box-shadow: 
+    5px 5px 15px rgba(33, 33, 33, 0.3),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  border-radius: 2px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), z-index 0s;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sticky-note::before {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 60%;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  filter: blur(8px);
+  z-index: -1;
+  transform: rotate(3deg);
+}
+
+.sticky-note:hover {
+  transform: scale(1.05) rotate(0deg) !important;
+  box-shadow: 
+    10px 10px 25px rgba(33, 33, 33, 0.4),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.sticky-note--amarillo { background: var(--sticky-amarillo); transform: rotate(-2deg); }
+.sticky-note--verde { background: var(--sticky-verde); transform: rotate(3deg); }
+.sticky-note--azul { background: var(--sticky-azul); transform: rotate(-3deg); }
+.sticky-note--rosa { background: var(--sticky-rosa); transform: rotate(2deg); }
+.sticky-note--naranja { background: var(--sticky-naranja); transform: rotate(-4deg); }
+
+.sticky-note:hover {
+  transform: scale(1.15) rotate(0deg) !important;
+  box-shadow: 
+    15px 15px 30px rgba(33, 33, 33, 0.4),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+}
+
+@media (max-width: 480px) {
+  .sticky-note {
+    max-width: 100%;
+    min-height: 160px;
+    padding: var(--space-md);
+    font-size: var(--fs-base);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-note {
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 /* ===== REVELACIÓN DE CONTENIDO TRAS CAJA ===== */
-/* Usamos visibility + opacity en lugar de display para permitir transiciones */
 .main-content {
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-slow) ease-out, visibility 0s linear var(--transition-slow);
-  /* Forzar capa de composición para mejor rendimiento */
   will-change: opacity, visibility;
 }
 
 .main-content[hidden] {
-  /* No usamos display: none, usamos visibility */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
