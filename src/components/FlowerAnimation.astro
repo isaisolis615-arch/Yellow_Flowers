@@ -30,7 +30,7 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
 
     <section class="section section--final" aria-labelledby="final-title">
       <div class="container">
-        <h2 id="final-title" class="section__title animate-fade-in">Siempre Juntos</h2>
+        <h2 id="final-title" class="section__title animate-fade-in">Siempre Juntas</h2>
         <div class="final__content animate-slide-up">
           <div class="sticky-note sticky-note--amarillo animate-slide-up" style="max-width: 500px; margin: var(--space-xl) auto;">
             <div class="sticky-note__poema">
@@ -52,8 +52,19 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
         </div>
       </div>
     </section>
+  </main>
 
-    <div id="flower-animation" class="flower-animation" hidden>
+  <Lightbox />
+  <AudioPlayer
+    tracks={[
+      { src: '/audio/The_Way_You_Make_Me_Feel.mp3', title: 'The Way You Make Me Feel', artist: 'Michael Jackson' },
+      { src: '/audio/You_Rock_My_World.mp3', title: 'You Rock My World', artist: 'Michael Jackson' }
+    ]}
+  />
+  <PetalRain trigger="scroll" />
+
+  <div id="flower-animation" class="flower-animation" hidden>
+    <body>
       <div class="night"></div>
       <div class="flowers">
         <div class="flower flower--1">
@@ -352,115 +363,12 @@ const pageDescription = 'Un regalo especial para mi mejor amiga: nuestras fotos,
         </div>
       </div>
       <div class="message">Estas flores amarillas son para ti</div>
-    </div>
-  </main>
-
-  <Lightbox />
-  <AudioPlayer
-    tracks={[
-      { src: '/audio/The_Way_You_Make_Me_Feel.mp3', title: 'The Way You Make Me Feel', artist: 'Michael Jackson' },
-      { src: '/audio/You_Rock_My_World.mp3', title: 'You Rock My World', artist: 'Michael Jackson' }
-    ]}
-  />
-  <PetalRain trigger="scroll" />
+    </body>
+  </div>
 </Layout>
 
 <style>
-  .hero {
-    min-height: 60vh;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    padding: var(--space-4xl) var(--container-padding);
-    background: linear-gradient(180deg, var(--color-crema) 0%, var(--color-blanco-hueso) 100%);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center, var(--color-amarillo-suave) 0%, transparent 60%);
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .hero__title {
-    font-family: var(--font-display);
-    font-size: var(--fs-4xl);
-    font-weight: 700;
-    color: var(--color-negro-suave);
-    margin-bottom: var(--space-md);
-    text-shadow: 0 2px 4px var(--color-sombra);
-  }
-
-  .hero__subtitle {
-    font-family: var(--font-handwriting);
-    font-size: var(--fs-xl);
-    color: var(--color-gris-calido);
-    max-width: 600px;
-  }
-
-  .hero__divider {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-md);
-    margin-top: var(--space-xl);
-  }
-
-  .hero__flower {
-    font-size: var(--fs-2xl);
-    animation: floatFlower 3s ease-in-out infinite;
-  }
-
-  .hero__flower:nth-child(2) { animation-delay: 0.5s; }
-  .hero__flower:nth-child(3) { animation-delay: 1s; }
-
-  @keyframes floatFlower {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-10px) rotate(5deg); }
-  }
-
-  .section__title {
-    text-align: center;
-    margin-bottom: var(--space-xl);
-    position: relative;
-    display: inline-block;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .section__title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-amarillo-medio), var(--color-rosa-suave));
-    border-radius: var(--radius-full);
-  }
-
-  .section--final {
-    background: linear-gradient(180deg, var(--color-crema) 0%, var(--color-rosa-palido) 100%);
-  }
-
-  .final__content {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  @media (max-width: 480px) {
-    .hero { min-height: 50vh; padding: var(--space-2xl) var(--container-padding); }
-    .hero__title { font-size: var(--fs-3xl); }
-    .hero__subtitle { font-size: var(--fs-lg); }
-    .section { padding: var(--space-2xl) 0; }
-  }
+/* Existing project styles can be here, or we rely on global.css */
 </style>
 
 <script>

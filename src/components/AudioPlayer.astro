@@ -194,14 +194,24 @@ const initialTrack = tracks[0];
     .audio-player {
       bottom: var(--space-sm);
       right: var(--space-sm);
-      left: var(--space-sm);
-      padding: var(--space-sm);
-      border-radius: var(--radius-lg);
-      transform: translateY(calc(100% + var(--space-sm)));
+      left: auto;
+      width: auto;
+      padding: var(--space-xs);
+      border-radius: var(--radius-full);
+      transform: translateY(0);
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      gap: 0;
     }
-    .audio-player__info { display: none; }
-    .audio-player__next { display: none; }
-    .audio-player__toggle { width: 44px; height: 44px; }
+    .audio-player__info { display: none !important; }
+    .audio-player__next { display: none !important; }
+    .audio-player__toggle { 
+      width: 56px; 
+      height: 56px; 
+      box-shadow: var(--shadow-strong);
+      background: var(--color-amarillo-medio);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
