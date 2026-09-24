@@ -5,10 +5,11 @@ interface Props {
     title: string;
     artist?: string;
   }>;
+  shuffle?: boolean;
 }
 
-const { tracks } = Astro.props;
-const initialTrack = tracks[0];
+const { tracks, shuffle = true } = Astro.props;
+const initialTrack = shuffle ? tracks[Math.floor(Math.random() * tracks.length)] : tracks[0];
 ---
 
 <div class="audio-player" data-audio-player>
@@ -286,8 +287,17 @@ const initialTrack = tracks[0];
     else play();
   }
 
+  function getRandomTrackIndex(excludeIndex = -1) {
+    if (sources.length <= 1) return 0;
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * sources.length);
+    } while (newIndex === excludeIndex);
+    return newIndex;
+  }
+
   function nextTrack() {
-    currentTrackIndex = (currentTrackIndex + 1) % sources.length;
+    currentTrackIndex = getRandomTrackIndex(currentTrackIndex);
     audio.src = sources[currentTrackIndex].src;
     audio.load();
     updateTrackInfo();
