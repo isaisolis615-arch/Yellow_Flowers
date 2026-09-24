@@ -37,15 +37,15 @@ const passwordPage = `<!DOCTYPE html>
     @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
     form{display:flex;flex-direction:column;gap:var(--space-lg)}
     .input-group{position:relative}
-    input[type="password"]{width:100%;padding:1rem 3rem 1rem 1.5rem;font-family:var(--font-ui);font-size:1.1rem;
+    input[type="password"], input[type="text"]{width:100%;padding:1rem 3rem 1rem 1.5rem;font-family:var(--font-ui);font-size:1.1rem;
       border:2px solid var(--amarillo-medio);border-radius:var(--radius-full);background:var(--blanco-hueso);
       color:var(--negro-suave);box-shadow:var(--shadow-medium);transition:border-color var(--transition-base),box-shadow var(--transition-base)}
-    input[type="password"]:focus{outline:none;border-color:var(--amarillo-fuerte);box-shadow:0 0 0 4px rgba(245,192,74,0.3)}
-    input[type="password"]::placeholder{color:var(--gris-calido);font-family:var(--font-handwriting)}
+    input[type="password"]:focus, input[type="text"]:focus{outline:none;border-color:var(--amarillo-fuerte);box-shadow:0 0 0 4px rgba(245,192,74,0.3)}
+    input[type="password"]::placeholder, input[type="text"]::placeholder{color:var(--gris-calido);font-family:var(--font-handwriting)}
     .toggle-visibility{position:absolute;right:1rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;
-      color:var(--gris-calido);padding:0.5rem;display:flex;align-items:center;justify-content:center}
+      color:var(--gris-calido);padding:0.5rem;display:flex;align-items:center;justify-content:center;z-index:10}
     .toggle-visibility:hover{color:var(--negro-suave)}
-    .toggle-visibility svg{width:20px;height:20px}
+    .toggle-visibility svg{width:20px;height:20px;flex-shrink:0}
     button[type="submit"]{padding:1rem 2rem;font-family:var(--font-display);font-size:1.2rem;font-weight:600;
       background:linear-gradient(135deg,var(--amarillo-medio),var(--amarillo-fuerte));color:var(--negro-suave);
       border:none;border-radius:var(--radius-full);cursor:pointer;box-shadow:var(--shadow-medium);
@@ -56,7 +56,6 @@ const passwordPage = `<!DOCTYPE html>
     button[type="submit"]:hover::before{opacity:1}
     button[type="submit"]:active{transform:translateY(0)}
     button[type="submit"] span{position:relative;z-index:1}
-    .hint{font-family:var(--font-handwriting);font-size:1rem;color:var(--gris-calido);margin-top:var(--space-lg);opacity:0.7}
     .error{color:#c0392b;font-family:var(--font-handwriting);font-size:1.1rem;margin-top:var(--space-md);min-height:1.5em;opacity:0;
       animation:shakeIn 0.4s ease-out forwards}
     @keyframes shakeIn{0%{opacity:0;transform:translateX(-10px)}20%{transform:translateX(5px)}40%{transform:translateX(-5px)}60%{transform:translateX(3px)}100%{opacity:1;transform:translateX(0)}}
@@ -89,7 +88,6 @@ const passwordPage = `<!DOCTYPE html>
       <button type="submit"><span>Abrir regalo 🌻</span></button>
       <p class="error" id="error" aria-live="polite"></p>
     </form>
-    <p class="hint">La contraseña es nuestro número especial 💛</p>
   </div>
   <script>
     (function(){
@@ -151,20 +149,27 @@ export default async function middleware(request: Request): Promise<Response> {
   // Password correcto en query -> set cookie + redirect limpio
   if (queryPwd === PASSWORD) {
     const cleanUrl = new URL(url.origin + url.pathname);
-    const response = Response.redirect(cleanUrl.toString(), 302);
-    response.headers.set('Set-Cookie', serializeCookie(COOKIE_NAME, PASSWORD, {
+    const headers = new Headers();
+    headers.set('Location', cleanUrl.toString());
+    headers.set('Set-Cookie', serializeCookie(COOKIE_NAME, PASSWORD, {
       maxAge: 60 * 60 * 24 * 30,
       path: '/',
       secure: true,
       sameSite: 'lax',
       httpOnly: true
     }));
-    return response;
+    return new Response(null, { status: 302, headers });
   }
 
-  // Cookie válida -> pasar
+  // Cookie válida -> dejar pasar la request al origen (el sitio real)
   if (cookies[COOKIE_NAME] === PASSWORD) {
-    return new Response(null, { status: 200, headers: { 'x-middleware-next': '1' } });
+    // En Vercel Edge middleware, para continuar al origen usamos headers especiales
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'x-middleware-next': '1'
+      }
+    });
   }
 
   // Mostrar página de password
