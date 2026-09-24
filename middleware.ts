@@ -140,11 +140,28 @@ function serializeCookie(name: string, value: string, options: {
   return parts.join('; ');
 }
 
+// Extensiones de archivos estáticos que NO deben pasar por el middleware
+const STATIC_EXTENSIONS = new Set([
+  '.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.avif',
+  '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.mp3', '.mp4',
+  '.pdf', '.txt', '.xml', '.json', '.map', '.wasm'
+]);
+
+function isStaticAsset(pathname: string): boolean {
+  const ext = pathname.substring(pathname.lastIndexOf('.'));
+  return STATIC_EXTENSIONS.has(ext.toLowerCase());
+}
+
 export default async function middleware(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const cookieHeader = request.headers.get('cookie') || '';
   const cookies = parseCookies(cookieHeader);
   const queryPwd = url.searchParams.get('pwd');
+
+  // No interceptar assets estáticos
+  if (isStaticAsset(url.pathname)) {
+    return new Response(null, { status: 200, headers: { 'x-middleware-next': '1' } });
+  }
 
   // Password correcto en query -> set cookie + redirect limpio
   if (queryPwd === PASSWORD) {
@@ -161,14 +178,11 @@ export default async function middleware(request: Request): Promise<Response> {
     return new Response(null, { status: 302, headers });
   }
 
-  // Cookie válida -> dejar pasar la request al origen (el sitio real)
+  // Cookie válida -> rewrite al origen (deja pasar al sitio real)
   if (cookies[COOKIE_NAME] === PASSWORD) {
-    // En Vercel Edge middleware, para continuar al origen usamos headers especiales
     return new Response(null, {
       status: 200,
-      headers: {
-        'x-middleware-next': '1'
-      }
+      headers: { 'x-middleware-rewrite': url.pathname + url.search }
     });
   }
 
