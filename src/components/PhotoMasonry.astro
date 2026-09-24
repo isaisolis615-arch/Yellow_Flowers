@@ -15,23 +15,22 @@ const { photos } = Astro.props;
   <div class="photo-masonry__grid" role="list">
     {photos.map((photo, index) => (
       <figure class="photo-masonry__item" role="listitem" data-index={index} data-special={photo.special ? 'true' : 'false'}>
-        <img
-          src={photo.src}
-          alt={photo.alt}
-          loading={index < 4 ? 'eager' : 'lazy'}
-          decoding="async"
-          width="400"
-          height="400"
-        />
-        {photo.special && (
-          <figcaption class="photo-masonry__badge">
-            <span class="photo-masonry__badge-icon" aria-hidden="true">✨</span>
-            <span>Especial</span>
-          </figcaption>
-        )}
-        {photo.year && (
-          <figcaption class="photo-masonry__year">{photo.year}</figcaption>
-        )}
+        <div class="photo-frame">
+          <img
+            src={photo.src}
+            alt={photo.alt}
+            loading={index < 4 ? 'eager' : 'lazy'}
+            decoding="async"
+            width="400"
+            height="400"
+          />
+          {photo.special && (
+            <figcaption class="photo-masonry__badge">
+              <span class="photo-masonry__badge-icon" aria-hidden="true">✨</span>
+              <span>Especial</span>
+            </figcaption>
+          )}
+        </div>
       </figure>
     ))}
   </div>
@@ -45,40 +44,71 @@ const { photos } = Astro.props;
   .photo-masonry__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-    gap: var(--space-md);
+    gap: var(--space-lg);
     align-items: start;
   }
 
   .photo-masonry__item {
     position: relative;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: var(--paper-bg);
-    box-shadow: var(--shadow-soft);
+    background: transparent;
+    box-shadow: none;
     cursor: zoom-in;
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
     aspect-ratio: 1 / 1;
   }
 
   .photo-masonry__item:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
   }
 
-  .photo-masonry__item[data-special="true"] {
-    box-shadow: 0 0 0 3px var(--color-amarillo-medio), var(--shadow-medium);
+  .photo-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    border-width: 20px;
+    border-style: solid;
+    border-color: #2F2D2D #434040 #4F4C4C #434040;
+    background: #f5f5f5;
+    background-image: linear-gradient(#E5E4DF, #CDCDC6);
+    box-shadow: 
+      inset 0 2px 5px rgba(0,0,0,.6),
+      0 5px 2px rgba(0,0,0,.1),
+      0 10px 20px rgba(0,0,0,.8);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
   }
 
-  .photo-masonry__item img {
+  .photo-frame::before {
+    content: "";
+    position: absolute;
+    top: -175px;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    transform: rotateZ(-40deg);
+    background-image: linear-gradient(rgba(255,255,255,.4), rgba(255,255,255,0));
+    pointer-events: none;
+  }
+
+  .photo-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #BBBAB4 #C7C7BF #E5E4DF #C7C7BF;
+    box-shadow: 
+      0 -1px 1px rgba(0,0,0,.1),
+      0 1px 1px 1px rgba(255,255,255,.7);
     transition: transform var(--transition-slow) ease-out;
+    border-radius: 4px;
   }
 
-  .photo-masonry__item:hover img {
-    transform: scale(1.05);
+  .photo-masonry__item:hover .photo-frame img {
+    transform: scale(1.02);
   }
 
   .photo-masonry__badge {
@@ -109,34 +139,51 @@ const { photos } = Astro.props;
     50% { transform: scale(1.2) rotate(10deg); opacity: 0.8; }
   }
 
-  .photo-masonry__year {
-    position: absolute;
-    bottom: var(--space-sm);
-    left: var(--space-sm);
-    padding: var(--space-xs) var(--space-sm);
-    background: rgba(0, 0, 0, 0.6);
-    color: var(--color-blanco-hueso);
-    border-radius: var(--radius-full);
-    font-family: var(--font-ui);
-    font-size: var(--fs-xs);
-    font-weight: 500;
-    backdrop-filter: blur(4px);
-    z-index: 2;
+  /* Inclinación aleatoria sutil para cada item */
+  .photo-masonry__item:nth-child(1) .photo-frame { transform: rotate(-2deg); }
+  .photo-masonry__item:nth-child(2) .photo-frame { transform: rotate(1.5deg); }
+  .photo-masonry__item:nth-child(3) .photo-frame { transform: rotate(-1deg); }
+  .photo-masonry__item:nth-child(4) .photo-frame { transform: rotate(2deg); }
+  .photo-masonry__item:nth-child(5) .photo-frame { transform: rotate(-1.5deg); }
+  .photo-masonry__item:nth-child(6) .photo-frame { transform: rotate(1deg); }
+  .photo-masonry__item:nth-child(7) .photo-frame { transform: rotate(-2.5deg); }
+  .photo-masonry__item:nth-child(8) .photo-frame { transform: rotate(2deg); }
+  .photo-masonry__item:nth-child(9) .photo-frame { transform: rotate(-1deg); }
+  .photo-masonry__item:nth-child(10) .photo-frame { transform: rotate(1.5deg); }
+  .photo-masonry__item:nth-child(11) .photo-frame { transform: rotate(-2deg); }
+
+  .photo-masonry__item:hover {
+    transform: translateY(-8px);
+    z-index: 10;
+  }
+
+  .photo-masonry__item:hover .photo-frame {
+    box-shadow: 
+      inset 0 2px 5px rgba(0,0,0,.6),
+      0 5px 2px rgba(0,0,0,.1),
+      0 20px 40px rgba(0,0,0,.5);
+    transform: rotate(0deg) scale(1.02);
   }
 
   @media (max-width: 480px) {
     .photo-masonry__grid {
       grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
-      gap: var(--space-sm);
+      gap: var(--space-md);
     }
-    .photo-masonry__item {
-      border-radius: var(--radius-md);
+    .photo-frame {
+      padding: 24px;
+      border-width: 12px;
+    }
+    .photo-frame::before {
+      top: -120px;
+      width: 250px;
+      height: 250px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .photo-masonry__item,
-    .photo-masonry__item img,
+    .photo-masonry__item .photo-frame img,
     .photo-masonry__badge-icon {
       transition: none !important;
       animation: none !important;
