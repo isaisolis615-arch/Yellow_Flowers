@@ -1,8 +1,5 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-const PASSWORD = '1820Ñ2'
-const COOKIE_NAME = 'yellow-flowers-auth'
+const PASSWORD = '1820Ñ2';
+const COOKIE_NAME = 'yellow-flowers-auth';
 
 const passwordPage = `<!DOCTYPE html>
 <html lang="es">
@@ -119,28 +116,59 @@ const passwordPage = `<!DOCTYPE html>
 </body>
 </html>`;
 
-export function middleware(request: NextRequest) {
-  const url = request.nextUrl.clone();
-  const cookie = request.cookies.get(COOKIE_NAME);
+function parseCookies(cookieHeader: string): Record<string, string> {
+  const cookies: Record<string, string> = {};
+  if (!cookieHeader) return cookies;
+  cookieHeader.split(';').forEach(c => {
+    const [key, ...val] = c.trim().split('=');
+    if (key) cookies[key] = val.join('=');
+  });
+  return cookies;
+}
+
+function serializeCookie(name: string, value: string, options: {
+  maxAge?: number;
+  path?: string;
+  secure?: boolean;
+  sameSite?: 'lax' | 'strict' | 'none';
+  httpOnly?: boolean;
+} = {}): string {
+  const parts = [`${name}=${value}`];
+  if (options.maxAge) parts.push(`Max-Age=${options.maxAge}`);
+  if (options.path) parts.push(`Path=${options.path}`);
+  if (options.secure) parts.push('Secure');
+  if (options.sameSite) parts.push(`SameSite=${options.sameSite}`);
+  if (options.httpOnly) parts.push('HttpOnly');
+  return parts.join('; ');
+}
+
+export default async function middleware(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const cookieHeader = request.headers.get('cookie') || '';
+  const cookies = parseCookies(cookieHeader);
   const queryPwd = url.searchParams.get('pwd');
 
+  // Password correcto en query -> set cookie + redirect limpio
   if (queryPwd === PASSWORD) {
-    const response = NextResponse.redirect(url.origin + url.pathname);
-    response.cookies.set(COOKIE_NAME, PASSWORD, {
-      httpOnly: true,
+    const cleanUrl = new URL(url.origin + url.pathname);
+    const response = Response.redirect(cleanUrl.toString(), 302);
+    response.headers.set('Set-Cookie', serializeCookie(COOKIE_NAME, PASSWORD, {
+      maxAge: 60 * 60 * 24 * 30,
+      path: '/',
       secure: true,
       sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 30,
-      path: '/'
-    });
+      httpOnly: true
+    }));
     return response;
   }
 
-  if (cookie?.value === PASSWORD) {
-    return NextResponse.next();
+  // Cookie válida -> pasar
+  if (cookies[COOKIE_NAME] === PASSWORD) {
+    return new Response(null, { status: 200, headers: { 'x-middleware-next': '1' } });
   }
 
-  return new NextResponse(passwordPage, {
+  // Mostrar página de password
+  return new Response(passwordPage, {
     status: 200,
     headers: { 'Content-Type': 'text/html; charset=utf-8' }
   });
